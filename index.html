@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales DBS</title>
+    
+    <!-- External Resources -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Link to local CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="login-icon">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+                    <h2>ACCESS CONTROL</h2>
+                    <p>Select Clearance Level</p>
+                </div>
+                
+                <div class="login-options">
+                    <!-- ADMIN -->
+                    <button class="role-btn admin" onclick="app.login('Admin')">
+                        <div class="role-icon">
+                            <i class="fa-solid fa-user-shield"></i>
+                        </div>
+                        <div class="role-info">
+                            <span class="role-title">Administrator</span>
+                            <span class="role-desc">Full Access</span>
+                        </div>
+                    </button>
+                    
+                    <!-- SALES (USER) -->
+                    <button class="role-btn sales" onclick="app.login('Sales')">
+                        <div class="role-icon">
+                            <i class="fa-solid fa-user-tag"></i>
+                        </div>
+                        <div class="role-info">
+                            <span class="role-title">Sales Operator</span>
+                            <span class="role-desc">Limited Access</span>
+                        </div>
+                    </button>
+                    
+                    <!-- VIEWER (PUBLIC) -->
+                    <button class="role-btn viewer" onclick="app.login('Viewer')">
+                        <div class="role-icon">
+                            <i class="fa-solid fa-eye"></i>
+                        </div>
+                        <div class="role-info">
+                            <span class="role-title">Public Viewer</span>
+                            <span class="role-desc">Read Only</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <div id="dashboard-screen" style="display: none;">
+        
+        <!-- SPLIT SCREEN CONTAINER -->
+        <div class="split-layout">
+            
+            <!-- LEFT PANEL - Contains all header elements -->
+            <div class="left-panel">
+                <!-- Logo Section -->
+                <div class="logo-section">
+                    <div class="logo">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Sales Analytics</span>
+                    </div>
+                </div>
+                
+                <!-- User Section -->
+                <div class="user-section">
+                    <div class="user-card">
+                        <div class="user-avatar">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div class="user-details">
+                            <span id="userDisplay" class="user-name">USER</span>
+                            <span class="user-role">Administrator</span>
+                        </div>
+                        <button class="logout-btn" onclick="app.logout()">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Navigation Section -->
+                <div class="nav-section">
+                    <div class="section-title">Navigation</div>
+                    <div class="breadcrumb">
+                        <span id="pageTitle">Dashboard</span>
+                    </div>
+                </div>
+                
+                <!-- Search Section -->
+                <div class="search-section">
+                    <div class="section-title">Search</div>
+                    <div class="search-container">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search records...">
+                    </div>
+                </div>
+                
+                <!-- Actions Section -->
+                <div class="actions-section">
+                    <div class="section-title">Actions</div>
+                    <button class="btn-primary" id="btnAdd" onclick="app.openAddModal()">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Add New Record</span>
+                    </button>
+                </div>
+                
+                <!-- Database Tables Section -->
+                <div class="tables-section">
+                    <div class="section-title">Database Tables</div>
+                    <nav id="sidebarNav" class="table-nav"></nav>
+                </div>
+                
+                <!-- System Info Section -->
+                <div class="system-section">
+                    <div class="section-title">System Information</div>
+                    <div class="system-info">
+                        <div class="info-item">
+                            <i class="fa-solid fa-server"></i>
+                            <span>SQL Server</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fa-solid fa-database"></i>
+                            <span>EcommerceApp</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fa-solid fa-clock"></i>
+                            <span id="currentTime">00:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL - Contains data at the top -->
+            <div class="right-panel">
+                <!-- Data Header -->
+                <div class="data-header">
+                    <h2>Data Management</h2>
+                    <div class="header-actions">
+                        <button class="btn-icon" title="Refresh">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                        </button>
+                        <button class="btn-icon" title="Export">
+                            <i class="fa-solid fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="stats-row">
+                    <div class="stat-card primary">
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-database"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3 id="statTotalRecords">0</h3>
+                            <p>Total Records</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card secondary">
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-table"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3 id="statTableName">-</h3>
+                            <p>Current Table</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card accent">
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3 id="tableCount">8</h3>
+                            <p>Total Tables</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table Section -->
+                <div class="table-section">
+                    <div class="table-header">
+                        <h3>Data Records</h3>
+                        <div class="table-info">
+                            <span id="recordInfo">No records loaded</span>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="dataTable">
+                            <thead id="tableHead"></thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add New Record</h3>
+                <button class="btn-close" onclick="app.closeModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="dynamicForm"></form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="app.closeModal()">Cancel</button>
+                <button class="btn-primary" onclick="app.saveRecord()">Save Record</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Link to local JS -->
+    <script src="script.js"></script>
+</body>
+</html>
